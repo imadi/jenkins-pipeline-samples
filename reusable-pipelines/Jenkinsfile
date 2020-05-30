@@ -1,3 +1,9 @@
+library identifier: 'shared-pipeline', 
+retriever: modernSCM([$class: 'GitSCMSource', 
+credentialsId: 'githubcred',
+ remote: 'https://github.com/imadi/jenkins-pipeline-samples.git', 
+ traits: [gitBranchDiscovery()]])
+
 pipeline {
     agent any
     parameters {
@@ -38,12 +44,4 @@ void auditTools () {
     sh '''
         git version
     '''
-}
-
-String getVersionSuffix() {
-    if (params.RC) {
-        return env.VERSION_RC
-    } else {
-        return env.VERSION_RC + '+ci.' + env.BUILD_NUMBER
-    }
 }
