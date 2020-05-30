@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         RELEASE = '20.04'
+        RAND = '000'
     }
     stages {
         stage('Build') {
@@ -16,8 +17,9 @@ pipeline {
             steps {
                 echo "Testing release ${RELEASE}"
                 script {
-                    def rand = Math.random();
+                    def rand = Math.random()
                     echo "Random Number ${rand}"
+                    RAND = rand
                     if (rand > 0.5) {
                         throw new Exception()
                     }
@@ -32,7 +34,8 @@ pipeline {
     post {
         success {
             archiveArtifacts 'test-results.txt'
-            sh 'echo "printing random number ${rand}"'
+            sh 'echo "printing random number ${RAND}"'
+            sh 'echo "printing random number ${env.RAND}"'
             slackSend channel: '#update',
                     color: 'good',
                     message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
