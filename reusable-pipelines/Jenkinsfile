@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    parameters {
+        booleanParam defaultValue: false, description: 'Is this a release candidate?', name: 'RC'
+    }
+    environment {
+        VERSION = "0.1.0"
+        VERSION_RC = "rc.2"
+    }
+    stages {
+        stage('Audit tools') {
+            steps {
+                sh '''
+                  git version
+                  docker version
+                  dotnet --list-sdks
+                  dotnet --list-runtimes
+                '''
+            }
+        }
+        stage('Build') {
+            environment {
+                VERSION_SUFFIX = getVersionSuffix()
+            }
+            steps {
+                echo "Building version: ${VERSION} with suffix: ${VERSION_SUFFIX}"
+            }
+        }
+        stage('Test') {
+            when {
+                expression { return params.RC }
+            }
+            steps {
+                writeFile file: 'test-results.txt', text: 'passed'
+                archiveArtifacts('test-results.txt')
+            }
+            
+        }
+    }
+}
+
+String getVersionSuffix() {
+    if (params.RC) {
+        return env.VERSION_RC
+    } else {
+        return env.VERSION_RC + '+ci.' + env.BUILD_NUMBER
+    }
+}
