@@ -1,32 +1,43 @@
 pipeline {
-   agent any
+    agent any
     environment {
-      RELEASE='20.04'
+        RELEASE = '20.04'
     }
-   stages {
-      stage('Build') {
+    stages {
+        stage('Build') {
             environment {
-               LOG_LEVEL='INFO'
+                LOG_LEVEL = 'INFO'
             }
             steps {
-               echo "Building release ${RELEASE} with log level ${LOG_LEVEL}..."
+                echo "Building release ${RELEASE} with log level ${LOG_LEVEL}..."
             }
         }
         stage('Test') {
             steps {
-               echo "Testing release ${RELEASE}"
-               writeFile file: 'test-results.txt', text: 'passed'      
+                echo "Testing release ${RELEASE}"
+                script {
+                    if (Math.random() > 0.5) {
+                        throw new Exception()
+                    }
+                }
+                writeFile file: 'test-results.txt', text: 'passed'
                 withCredentials([string(credentialsId: 'slack-token', variable: 'API_KEY')]) {
-                 echo "Using key ${API_KEY}"
-               }         
+                    echo "Using key ${API_KEY}"
+                }
             }
         }
-   }
-   post {
-      success {
-         archiveArtifacts 'test-results.txt'
-         slackSend channel: '#update',
-                   message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
-      }
-   }
+    }
+    post {
+        success {
+            archiveArtifacts 'test-results.txt'
+            slackSend channel: '#update',
+                    color: 'good',
+                    message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
+        }
+        failure {
+            slackSend channel: '#update',
+                    color: 'danger',
+                    message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
+        }
+    }
 }
