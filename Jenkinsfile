@@ -42,10 +42,10 @@ pipeline {
             steps {
                 echo "Deploying release ${RELEASE} to environment ${TARGET_ENVIRONMENT}"
             }
-        }
-        post {
-            always {
-                echo 'Prints when deploy stage is complete'
+            post {
+                always {
+                    echo 'Prints when deploy stage is complete'
+                }
             }
         }
     }
