@@ -43,7 +43,7 @@ pipeline {
         failure {
             slackSend channel: '#update',
                     color: 'danger',
-                    message: "Release ${env.RELEASE}, success: ${currentBuild.fullDisplayName}."
+                    message: "Release ${env.RELEASE}, FAILED: ${currentBuild.fullDisplayName}."
         }
     }
 }
