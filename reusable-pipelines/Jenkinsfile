@@ -10,12 +10,7 @@ pipeline {
     stages {
         stage('Audit tools') {
             steps {
-                sh '''
-                  git version
-                  docker version
-                  dotnet --list-sdks
-                  dotnet --list-runtimes
-                '''
+                auditTools()
             }
         }
         stage('Build') {
@@ -37,6 +32,13 @@ pipeline {
             
         }
     }
+}
+
+void auditTools () {
+    sh '''
+        git version
+        docker version
+    '''
 }
 
 String getVersionSuffix() {
