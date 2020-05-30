@@ -16,7 +16,7 @@ pipeline {
             steps {
                echo "Testing release ${RELEASE}"
                writeFile file: 'test-results.txt', text: 'passed'      
-                withCredentials([string(credentialsId: 'api-token', variable: 'API_KEY')]) {
+                withCredentials([string(credentialsId: 'slack-token', variable: 'API_KEY')]) {
                  echo "Using key ${API_KEY}"
                }         
             }
