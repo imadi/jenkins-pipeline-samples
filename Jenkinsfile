@@ -43,7 +43,7 @@ pipeline {
                 echo "Deploying release ${RELEASE} to environment ${TARGET_ENVIRONMENT}"
             }
         }
-        post{
+        post {
             always {
                 echo 'Prints when deploy stage is complete'
             }
