@@ -1,4 +1,4 @@
-library identifier: 'shared-pipeline', 
+library identifier: 'shared-pipeline@master', 
 retriever: modernSCM([$class: 'GitSCMSource', 
 credentialsId: 'githubcred',
  remote: 'https://github.com/imadi/jenkins-pipeline-samples.git'])
