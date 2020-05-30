@@ -17,6 +17,7 @@ pipeline {
                 echo "Testing release ${RELEASE}"
                 script {
                     def rand = Math.random();
+                    echo "Random Number ${rand}"
                     if (rand > 0.5) {
                         throw new Exception()
                     }
