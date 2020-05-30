@@ -1,47 +1,13 @@
-library identifier: 'shared-pipeline', 
-retriever: modernSCM([$class: 'GitSCMSource', 
-credentialsId: 'githubcred',
- remote: 'https://github.com/imadi/jenkins-pipeline-samples.git', 
- traits: [gitBranchDiscovery()]])
+library identifier: 'jenkins-pipeline-demo-library@master', 
+        retriever: modernSCM([$class: 'GitSCMSource', remote: 'https://github.com/sixeyed/jenkins-pipeline-demo-library.git'])
 
 pipeline {
     agent any
-    parameters {
-        booleanParam defaultValue: false, description: 'Is this a release candidate?', name: 'RC'
-    }
-    environment {
-        VERSION = "0.1.0"
-        VERSION_RC = "rc.2"
-    }
     stages {
-        stage('Audit tools') {
+        stage('Audit tools') {                        
             steps {
                 auditTools()
             }
         }
-        stage('Build') {
-            environment {
-                VERSION_SUFFIX = getVersionSuffix()
-            }
-            steps {
-                echo "Building version: ${VERSION} with suffix: ${VERSION_SUFFIX}"
-            }
-        }
-        stage('Test') {
-            when {
-                expression { return params.RC }
-            }
-            steps {
-                writeFile file: 'test-results.txt', text: 'passed'
-                archiveArtifacts('test-results.txt')
-            }
-            
-        }
     }
-}
-
-void auditTools () {
-    sh '''
-        git version
-    '''
 }
