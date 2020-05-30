@@ -1,9 +1,7 @@
-
 library identifier: 'shared-pipeline', 
 retriever: modernSCM([$class: 'GitSCMSource', 
 credentialsId: 'githubcred',
- remote: 'https://github.com/imadi/jenkins-pipeline-samples.git', 
- traits: [gitBranchDiscovery()]])
+ remote: 'https://github.com/imadi/jenkins-pipeline-samples.git'])
 
 pipeline {
     agent any
