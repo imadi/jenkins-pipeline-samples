@@ -42,7 +42,6 @@ pipeline {
         }
         failure {
             sh 'echo "printing random number ${RAND}"'
-            sh 'echo "printing random number ${env.RAND}"'
             slackSend channel: '#update',
                     color: 'danger',
                     message: "Release ${env.RELEASE}, FAILED: ${currentBuild.fullDisplayName}."
