@@ -1,3 +1,9 @@
+library identifier: 'shared-pipeline@master', 
+retriever: modernSCM([$class: 'GitSCMSource', 
+credentialsId: 'githubcred',
+remote: 'https://github.com/imadi/jenkins-pipeline-samples.git', 
+traits: [gitBranchDiscovery()]])
+
 pipeline {
     agent any
     parameters {
@@ -19,6 +25,11 @@ pipeline {
             }
             steps {
                 echo "Building version: ${VERSION} with suffix: ${VERSION_SUFFIX}"
+                script {
+                    def z = new com.adi.GetVersion()
+                    print("hello")
+                    print(z.getVersionSuffix())
+                }
             }
         }
         stage('Test') {
@@ -33,9 +44,3 @@ pipeline {
         }
     }
 }
-
-library identifier: 'shared-pipeline@master', 
-retriever: modernSCM([$class: 'GitSCMSource', 
-credentialsId: 'githubcred',
-remote: 'https://github.com/imadi/jenkins-pipeline-samples.git', 
-traits: [gitBranchDiscovery()]])
