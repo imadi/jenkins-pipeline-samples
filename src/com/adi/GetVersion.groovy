@@ -1,5 +1,6 @@
 package com.adi
 
 def getVersionSuffix() {
-    return "0.0.1"
+    print('0.0.1')
 }
+return this
